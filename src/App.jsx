@@ -13,13 +13,13 @@ function App() {
     if (numberAllowed) str += "0123456789";
     if (charAllowed) str += "!@#$%^&*()-_=+~";
 
-    for (let i = 1; i < length; i++) {
+    for (let i = 1; i <= length; i++) {
       let char = Math.floor(Math.random() * str.length + 1);
-
-      pass = str.charAt(char);
+      pass += str.charAt(char);
     }
 
     setPassword(pass);
+    console.log("Pass : ", pass);
   }, [length, numberAllowed, charAllowed, setPassword]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ function App() {
           <input
             type="text"
             value={password}
-            className="outline-none bg-black-700 text-white px-3 py-1.5 w-full"
+            className="outline-none bg-black-700 text-black text-md px-3 py-1.5 w-full"
             placeholder="Password"
             readOnly
           />
