@@ -5,8 +5,7 @@ function App() {
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
-
-  //Use Ref Hook
+  const [showNotification, setShowNotification] = useState(false);
 
   const passwordRef = useRef(null);
 
@@ -17,8 +16,8 @@ function App() {
     if (numberAllowed) str += "0123456789";
     if (charAllowed) str += "!@#$%^&*()-_=+~";
 
-    for (let i = 1; i <= length; i++) {
-      let char = Math.floor(Math.random() * str.length + 1);
+    for (let i = 0; i < length; i++) {
+      let char = Math.floor(Math.random() * str.length);
       pass += str.charAt(char);
     }
 
@@ -27,22 +26,23 @@ function App() {
   }, [length, numberAllowed, charAllowed, setPassword]);
 
   const copyPasswordToClipboard = useCallback(() => {
+    passwordRef.current?.select();
     window.navigator.clipboard.writeText(password);
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
   }, [password]);
 
   useEffect(() => {
     passwordGenerator();
   }, [length, numberAllowed, charAllowed, passwordGenerator]);
 
-  const handleCopy = (event) => {
-    console.log("Copy:", event);
-  };
-
   return (
     <>
       <div className="w-full max-w-md mx-auto shadow-md rounded-lg my-8 px-4 py-3 text-orange-500 bg-gray-700">
         <h1 className="text-white text-center my-3">Password Generator</h1>
-        <div className="flex shadow rounded-lg  overflow-hidden mb-4">
+        <div className="flex shadow rounded-lg overflow-hidden mb-4">
           <input
             type="text"
             value={password}
@@ -51,7 +51,6 @@ function App() {
             readOnly
             ref={passwordRef}
           />
-
           <button
             className="outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0"
             onClick={copyPasswordToClipboard}
@@ -59,6 +58,11 @@ function App() {
             Copy
           </button>
         </div>
+        {showNotification && (
+          <div className="bg-green-500 text-white py-2 px-4 rounded mb-4">
+            Password copied to clipboard!
+          </div>
+        )}
         <div className="flex text-sm gap-x-2">
           {/* Range Field */}
           <div className="flex items-center gap-x-1">
