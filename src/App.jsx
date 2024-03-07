@@ -27,6 +27,7 @@ function App() {
 
   const copyPasswordToClipboard = useCallback(() => {
     passwordRef.current?.select();
+    // passwordRef.current.setSelectionRange(0, 3);
     window.navigator.clipboard.writeText(password);
     setShowNotification(true);
     setTimeout(() => {
@@ -58,13 +59,18 @@ function App() {
             Copy
           </button>
         </div>
+
+        {/* Showing Copied Notificaton */}
+
         {showNotification && (
           <div className="bg-green-500 text-white py-2 px-4 rounded mb-4">
             Password copied to clipboard!
           </div>
         )}
+
+        {/* Range Field */}
+
         <div className="flex text-sm gap-x-2">
-          {/* Range Field */}
           <div className="flex items-center gap-x-1">
             <input
               type="range"
